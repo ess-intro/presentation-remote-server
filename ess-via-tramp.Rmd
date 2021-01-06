@@ -13,7 +13,14 @@ slug: emacs-tutorial-remote
 author: "Chris Wallace"
 ---
 
-It can be slow and frustrating to run R via a GUI when your data and R are on a remote server.  Emacs has long had support for editing remote files via [tramp](https://www.gnu.org/software/tramp/), and ESS allows emacs to interact with a remote R process.
+It can be slow and frustrating to run R via a GUI when your data and R are on a remote server.  Emacs has long had support for editing remote files via [tramp](https://www.gnu.org/software/tramp/), and ESS allows emacs to interact with a remote R process.  This can bring the best of both worlds: a GUI editor running locally (so fast), interacting with an R process on the remote server.  Graphics can be served from the remote server as long as you have lines like 
+
+```
+Host *
+     ForwardX11 yes
+```
+
+in your ssh config file (`~/.ssh/config` on a linux machine).
 
 In this doc, I assume
 - emacs is installed on the  local machine `A` 
