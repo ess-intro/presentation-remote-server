@@ -1,0 +1,70 @@
+---
+categories: 
+- tutorials
+date: "2021-01-06"
+tags: 
+- emacs
+- programming
+- bioinformatics
+- R
+- remote
+title: "Getting Started with R Programming in Emacs: working on a remote server"
+slug: emacs-tutorial-remote
+author: "Chris Wallace"
+---
+
+It can be slow and frustrating to run R via a GUI when your data and R are on a remote server.  Emacs has long had support for editing remote files via [tramp](https://www.gnu.org/software/tramp/), and ESS allows emacs to interact with a remote R process.
+
+In this doc, I assume
+- emacs is installed on the  local machine `A` 
+- R is installed on the  remote  server `B`
+- you know how to ssh from `A` to `B`
+- you have installed ESS as described in [intro to ESS](https://github.com/ess-intro/presentation-ess-base-install)
+Your R script files can be on either `A` or `B`.
+
+# Starting a remote R process within emacs
+
+First open a file or directory on the remote server over ssh. 
+
+`C-x C-f /ssh:user@B:~/ RET`
+
+If you have aliases set up in your `$HOME/.ssh/config` you can use the alias here instead of `user@B`.  Then if you start an R process from that buffer, it will call R on the machine `B`.  Do this by 
+
+`M-x R`
+
+That's it, you have a running R process on the remote machine.  Type
+
+`system("hostname")`
+
+to check.
+
+# Interacting with a remote R process from an R script on a remote server
+
+Open the remote R script over ssh. E.g. if the script is called myscript.R in your remote home directory, do 
+
+`C-x C-f /ssh:user@B:~/myscript.R RET`
+
+Start an R process from that buffer, it will split the window if needed, and start on the machine `B`.  Do this by 
+
+`M-x R`
+
+That's it, you should have a running R process on the remote machine.  All the standard ESS commands should work.  So if you type a line in the script file, you can run it in the R process using 
+
+`C-c RET`
+
+or run a block of code using 
+
+`C-c C-c`
+
+See the [intro to ESS](https://github.com/ess-intro/presentation-ess-base-install) to learn more.
+
+# Configuring tramp
+
+While tramp comes with emacs, there are a couple of settings that can help if you add them to your emacs config file
+
+```
+;; ssh seems the most reliable connection method
+(setq tramp-default-method "ssh") 
+;; this sets the path on the remote server according to the ~/.profile file on the remote machine. Useful if your R is in a non-standard location
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)) 
+```
